@@ -1,9 +1,11 @@
 'use client';
 import React from 'react';
-import { Grid, Paper, Typography, Checkbox, FormControlLabel, Button, List, ListItem } from '@mui/material';
+import { Grid, Paper, Typography, Checkbox, FormControlLabel, Button, List, ListItem,Skeleton } from '@mui/material';
 import { UpdateTodo } from '@/app/_interfaces/update-todo.interface';
 import { Todo } from '@/app/_interfaces/todo.interface';
 import { Status } from '@/app/_enums/todo-status.enum';
+
+
 
 
 interface TodoItemProps {
@@ -14,10 +16,14 @@ interface TodoItemProps {
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdate, onDelete, handleEdit }) => {
+
+  
   const handleCheckboxChange = (id: number | string, status: Status) => {
     const updatedTodo: UpdateTodo = { status };
     onUpdate(id, updatedTodo);
   };
+
+
 
   return (
     <ListItem divider alignItems="center" style = {{backgroundColor: '#f2f2f2', padding: '10px', border: 'none'
@@ -49,6 +55,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdate, onDelete, handleEdi
         Delete
       </Button>
     </ListItem>
+
   );
 };
 
@@ -64,13 +71,22 @@ interface TodoListProps {
 
 const TodoList: React.FC<TodoListProps> = ({ todos, onUpdate, onDelete, handleEdit }) => {
   return (
+   
     <Grid container direction="column" spacing={2}>
+      
       {todos?.map((todo) => (
+          
+
         <Grid item xs={12} key={todo.id}>
+       
           <TodoItem todo={todo} onUpdate={onUpdate} onDelete={onDelete} handleEdit={handleEdit} />
+          
         </Grid>
+
       ))}
+     
     </Grid>
+    
   );
 };
 
