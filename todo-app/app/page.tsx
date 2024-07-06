@@ -14,6 +14,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { showErrorToast,showSuccessToast,showPromiseToast  } from './_helpers/toast-helper';
 import { ToastContainer,Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTodoStore } from './_stores/useTodo';
 const Home: React.FC = () => {
   const { data: todos, error, isLoading } = useGetTodosQuery();
   
@@ -21,12 +22,25 @@ const Home: React.FC = () => {
   const deleteTodoMutation = useDeleteTodoMutation();
   const createTodoMutation = useCreateTodoMutation();
 
-  const [newTodo, setNewTodo] = useState<CreateTodo>({ title: '', description: '' });
+
   const [isMounted, setIsMounted] = useState(false);
-  const [isEdited, setIsEdited] = useState(false);
-  const [editId, setEditId] = useState<number | string | null>(null);
-  const [isFocused, setIsFocused] = useState(false);
-  const [hasInput, setHasInput] = useState(false);
+  const {
+    newTodo,
+    isEdited,
+    editId,
+    isFocused,
+    hasInput,
+    setTodos,
+    setNewTodo,
+    setIsEdited,
+    setEditId,
+    setIsFocused,
+    setHasInput,
+    resetNewTodo,
+    addTodo,
+    updateTodo,
+    deleteTodo,
+  } = useTodoStore();
 
   const sortedTodos = useMemo(() => {
     if (todos) {
@@ -85,6 +99,7 @@ const Home: React.FC = () => {
       setNewTodo({ title: todo.title, description: todo.description });
       setIsEdited(true);
       setEditId(id);
+      setIsFocused(true);
     }
   };
 
@@ -125,7 +140,7 @@ const Home: React.FC = () => {
               <TextField
                 variant="outlined"
                 onChange={onChange}
-                label="Add Todo"
+                label={isEdited ? "Edit Task" : "Add Task"}
                 value={newTodo.title}
                 fullWidth
                 onFocus={() => setIsFocused(true)}
