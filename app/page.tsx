@@ -21,7 +21,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useInView } from 'react-intersection-observer';
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 10;
 const Home: React.FC = () => {
   const { data: todos, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetTodosQuery({ limit: ITEMS_PER_PAGE });
   const [ref, inView] = useInView();
