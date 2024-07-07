@@ -15,6 +15,7 @@ import { showErrorToast,showSuccessToast,showPromiseToast  } from './_helpers/to
 import { ToastContainer,Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTodoStore } from './_stores/useTodo';
+import {GridLoader} from 'react-spinners';
 const Home: React.FC = () => {
   const { data: todos, error, isLoading } = useGetTodosQuery();
   
@@ -61,7 +62,7 @@ const Home: React.FC = () => {
   showPromiseToast(
     createPromise,
     {
-      pending: 'Creating new todo...',
+      pending: isEdited ? 'Updating todo...' : 'Creating new todo...',
       success: isEdited ? `Todo ${editId} updated successfully` : 'Todo created successfully',
       error: error?.message || 'Error creating todo'
     }
@@ -123,13 +124,19 @@ const Home: React.FC = () => {
     }
   };
 
-
+  if (isLoading) {
+    return (
+      <Grid container justifyContent="center" alignItems="center" height={"100vh"} >
+        <GridLoader color="rgba(40, 174, 179, 1)" size={20} speedMultiplier={1} />
+      </Grid>
+    );
+  }
   if (error) return <div>An error occurred</div>;
   if (!isMounted) return null;
 
   return (
     <main>
-    <Grid container justifyContent="center">
+    <Grid container justifyContent="center" alignItems="flex-start" height={"100vh"}>
       <Grid item xs={12} md={8} lg={6}>
         <Container component="main" style={{ textAlign: 'center', borderRadius: "12px", boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px", background: "white", padding: "20px" }}>
           <Typography variant="h5" component="div" align="center" gutterBottom style={{ marginBottom: '20px' }}>
