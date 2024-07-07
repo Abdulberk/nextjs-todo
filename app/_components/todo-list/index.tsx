@@ -33,7 +33,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdate, onDelete, handleEdi
       sx={{
         color: "pink",
         '&.Mui-checked': {
-        color: "green",
+        color: "#48d9b7",
          },
        }}
       size='large'
@@ -42,8 +42,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdate, onDelete, handleEdi
       />
       <Typography
         style={{ 
-          color: todo.status === Status.COMPLETED ? "green" : "",
-          textDecoration: todo.status === Status.COMPLETED ? "line-through" : "none"
+          color: todo.status === Status.COMPLETED ? "#48d9b7" : "",
+          textDecoration: todo.status === Status.COMPLETED ? "line-through" : "none",
+          transition: "color 0.3s ease",
         }}
         key={todo.id}
       >
