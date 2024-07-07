@@ -132,9 +132,11 @@ const Home: React.FC = () => {
     <Grid container justifyContent="center" alignItems="flex-start" height={"100vh"}>
       <Grid item xs={12} md={8} lg={6}>
         <Container component="main" style={{ textAlign: 'center', borderRadius: "12px", boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px", background: "white", padding: "20px" }}>
-          <Typography variant="h5" component="div" align="center" gutterBottom style={{ marginBottom: '20px', }}>
+          <Grid container justifyContent="center" alignItems="center" >
+          <Typography  variant="h5" component="div" align="center" gutterBottom>
             Todo App
           </Typography>
+          </Grid>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={hasInput ? 9 : 12} style={{ transition: 'all 0.3s' }}>
               <TextField
@@ -173,7 +175,7 @@ const Home: React.FC = () => {
                   onClick={handleCreateTodo}
                   disabled={!newTodo.title}
                   startIcon={isEdited ? <EditIcon /> : <AddIcon />} 
-                    
+
                 >
                   {isEdited ? "Edit Task" : "Add Task"}
                 </Button>
