@@ -22,6 +22,7 @@ const fetchTodos = async () => {
               refetchOnWindowFocus:false,
               refetchOnMount:true,
                enabled: hasToken,
+               refetchOnReconnect:true,
               
           },        
       )

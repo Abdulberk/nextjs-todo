@@ -61,7 +61,7 @@ const Home: React.FC = () => {
   showPromiseToast(
     createPromise,
     {
-      pending: 'Processing...',
+      pending: 'Creating new todo...',
       success: isEdited ? `Todo ${editId} updated successfully` : 'Todo created successfully',
       error: error?.message || 'Error creating todo'
     }

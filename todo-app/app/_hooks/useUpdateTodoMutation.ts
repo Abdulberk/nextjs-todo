@@ -5,7 +5,6 @@ import { UpdateTodo } from "../_interfaces/update-todo.interface";
 import { UpdatedTodoResponse } from "../_interfaces/updated-todo-response.interface";
 import { Todo } from "../_interfaces/todo.interface";
 
-
 const updateTodo = async ({ id, updatedTodo }: { id: number | string; updatedTodo: UpdateTodo }) => {
   const response = await axiosInstance.patch(`/todos/${id}`, updatedTodo);
   const data: UpdatedTodoResponse = response.data;
@@ -35,10 +34,9 @@ export const useUpdateTodoMutation = () => {
           return { previousTodos, updatedData };
       },
       onError: (error, variables, context) => {
-          if (context?.previousTodos) {
-              queryClient.setQueryData(["todos"], context.previousTodos);
-          }
-          
+        if (context?.previousTodos) {
+          queryClient.setQueryData(["todos"], context.previousTodos);
+        }
       },
       onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["todos"] });
@@ -48,4 +46,5 @@ export const useUpdateTodoMutation = () => {
       },
   });
 };
+
   
