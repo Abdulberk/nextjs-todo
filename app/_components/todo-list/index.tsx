@@ -31,7 +31,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdate, onDelete, handleEdi
     }}>
       <Checkbox
       sx={{
-        color: "pink",
+        color: "#48d9b7",
         '&.Mui-checked': {
         color: "#48d9b7",
          },

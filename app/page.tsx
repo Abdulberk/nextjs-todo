@@ -19,8 +19,12 @@ import Spinner from './_components/spinner';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import { useInView } from 'react-intersection-observer';
+
+const ITEMS_PER_PAGE = 5;
 const Home: React.FC = () => {
-  const { data: todos, error, isLoading } = useGetTodosQuery();
+  const { data: todos, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetTodosQuery({ limit: ITEMS_PER_PAGE });
+  const [ref, inView] = useInView();
   
   const updateTodoMutation = useUpdateTodoMutation();
   const deleteTodoMutation = useDeleteTodoMutation();
@@ -42,14 +46,21 @@ const Home: React.FC = () => {
     updateTodo,
     deleteTodo,
   } = useTodoStore();
+  
 
-  const sortedTodos = useMemo(() => {
-    if (todos) {
-      return [...todos].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  const allTodos = useMemo(() => {
+    return todos?.pages.flatMap(page => page.todos) || [];
+}, [todos]);
+
+const sortedTodos = useMemo(() => {
+    return [...allTodos].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+}, [allTodos]);
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+        fetchNextPage();
     }
-    return [];
-  }, [todos]);
-
+}, [inView, hasNextPage, fetchNextPage]);
 
   const handleCreateTodo = () => {
     const createPromise = isEdited && editId
@@ -183,13 +194,13 @@ const Home: React.FC = () => {
             )}
           </Grid>
           <Box mt={4}>
-          {
-                    todos ? <TodoList todos={sortedTodos} onUpdate={handleUpdateTodo} onDelete={handleDeleteTodo} handleEdit={handleEdit} /> : <Skeleton count={5} width ={900} height ={64} borderRadius={"12px"} style={{marginBottom: "0.5rem"}}/> 
-                  }
-                   {
-                      todos?.length === 0 && <p style={{textAlign: "center"}}>No todos found</p>
-                    }
+          {sortedTodos.length > 0 ? <TodoList todos={sortedTodos} onUpdate={handleUpdateTodo} onDelete={handleDeleteTodo} handleEdit={handleEdit} /> : <Skeleton count={5} width={900} height={64} borderRadius={"12px"} style={{ marginBottom: "0.5rem" }} />}
+                            {sortedTodos.length === 0 && <p style={{ textAlign: "center" }}>No todos found</p>}
           </Box>
+            
+          <div ref={ref} />
+          {isFetchingNextPage && <Spinner />}
+
         </Container>
       </Grid>
     </Grid>

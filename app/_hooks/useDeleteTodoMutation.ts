@@ -17,25 +17,32 @@ export const useDeleteTodoMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: any) => deleteTodo(data),
+    mutationFn: (id: number | string) => deleteTodo(id),
     onMutate: async (id: number | string) => {
       await queryClient.cancelQueries({ queryKey: ["todos"] });
 
-      const previousTodos = queryClient.getQueryData(["todos"]);
+      const previousTodos = queryClient.getQueryData<Todo>(["todos"]);
 
-      queryClient.setQueryData(["todos"], (oldTodos: any) => 
-        oldTodos.filter((todo: Todo) => todo.id !== id)
-      );
+      queryClient.setQueryData<Todo>(["todos"], (oldTodos: any) => ({
+        ...oldTodos,
+        pages: oldTodos.pages.map((page: any) => ({
+          ...page,
+          todos: page.todos.filter((todo: Todo) => todo.id !== id),
+        })),
+      }));
 
       return { previousTodos };
     },
     onError: (error, variables, context) => {
-      queryClient.setQueryData(["todos"], context?.previousTodos);
-     
+      if (context?.previousTodos) {
+        queryClient.setQueryData(["todos"], context.previousTodos);
+      }
     },
-    onSuccess: (data, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
-  
-    }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
   });
 };
