@@ -4,7 +4,8 @@ import { Grid, Paper, Typography, Checkbox, FormControlLabel, Button, List, List
 import { UpdateTodo } from '@/app/_interfaces/update-todo.interface';
 import { Todo } from '@/app/_interfaces/todo.interface';
 import { Status } from '@/app/_enums/todo-status.enum';
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 
@@ -48,10 +49,10 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onUpdate, onDelete, handleEdi
       >
         {todo.title}
       </Typography>
-      <Button onClick={() => handleEdit(todo.id)} variant="contained">
+      <Button onClick={() => handleEdit(todo.id)} variant="contained" startIcon={<EditIcon />}>
         Edit
       </Button>
-      <Button onClick={() => onDelete(todo.id)} color="secondary" variant="contained">
+      <Button onClick={() => onDelete(todo.id)} color="secondary" variant="contained" startIcon={<DeleteIcon />}>
         Delete
       </Button>
     </ListItem>

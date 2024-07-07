@@ -15,16 +15,16 @@ import { showErrorToast,showSuccessToast,showPromiseToast  } from './_helpers/to
 import { ToastContainer,Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTodoStore } from './_stores/useTodo';
-import {GridLoader} from 'react-spinners';
+import Spinner from './_components/spinner';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 const Home: React.FC = () => {
   const { data: todos, error, isLoading } = useGetTodosQuery();
   
   const updateTodoMutation = useUpdateTodoMutation();
   const deleteTodoMutation = useDeleteTodoMutation();
   const createTodoMutation = useCreateTodoMutation();
-
-
-  const [isMounted, setIsMounted] = useState(false);
   const {
     newTodo,
     isEdited,
@@ -50,9 +50,6 @@ const Home: React.FC = () => {
     return [];
   }, [todos]);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const handleCreateTodo = () => {
     const createPromise = isEdited && editId
@@ -125,21 +122,17 @@ const Home: React.FC = () => {
   };
 
   if (isLoading) {
-    return (
-      <Grid container justifyContent="center" alignItems="center" height={"100vh"} >
-        <GridLoader color="rgba(40, 174, 179, 1)" size={20} speedMultiplier={1} />
-      </Grid>
-    );
+    return <Spinner />
   }
-  if (error) return <div>An error occurred</div>;
-  if (!isMounted) return null;
+  if (error) return 
+
 
   return (
     <main>
     <Grid container justifyContent="center" alignItems="flex-start" height={"100vh"}>
       <Grid item xs={12} md={8} lg={6}>
         <Container component="main" style={{ textAlign: 'center', borderRadius: "12px", boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px", background: "white", padding: "20px" }}>
-          <Typography variant="h5" component="div" align="center" gutterBottom style={{ marginBottom: '20px' }}>
+          <Typography variant="h5" component="div" align="center" gutterBottom style={{ marginBottom: '20px', }}>
             Todo App
           </Typography>
           <Grid container spacing={2} alignItems="center">
@@ -179,7 +172,8 @@ const Home: React.FC = () => {
                   color="primary"
                   onClick={handleCreateTodo}
                   disabled={!newTodo.title}
-                  
+                  startIcon={isEdited ? <EditIcon /> : <AddIcon />} 
+                    
                 >
                   {isEdited ? "Edit Task" : "Add Task"}
                 </Button>
