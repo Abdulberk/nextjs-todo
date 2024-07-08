@@ -4,6 +4,7 @@ import axiosInstance from "../_interceptor/axiosInstance";
 import cookie from 'js-cookie';
 import { Todo } from "../_interfaces/todo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useTodoStore } from "../_stores/useTodo";
 
 export interface GetTodosQueryOptions {
     page: number;
@@ -25,6 +26,7 @@ const fetchTodos = async ({ page, limit }: GetTodosQueryOptions) => {
   };
   
  export const useGetTodosQuery = ({ limit }: {limit:number}) => {
+ 
     const hasToken = !!cookie.get('token');
     const { data, isLoading, error, refetch, status, isError, fetchNextPage, hasNextPage,isFetchingNextPage } = useInfiniteQuery({
         queryKey: ['todos'],
@@ -42,7 +44,7 @@ const fetchTodos = async ({ page, limit }: GetTodosQueryOptions) => {
         refetchOnWindowFocus: false,
         refetchOnMount: true,
         enabled: hasToken,
-        
+            
 
     })
 

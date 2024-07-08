@@ -1,7 +1,6 @@
-import {create} from 'zustand';
+import { create } from 'zustand';
 import { Todo } from '@/app/_interfaces/todo.interface';
 import { CreateTodo } from '../_interfaces/create-todo.interface';
-
 
 export interface TodoState {
   todos: Todo[];

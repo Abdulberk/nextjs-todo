@@ -20,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useInView } from 'react-intersection-observer';
+import { DropResult } from 'react-beautiful-dnd';
 
 const ITEMS_PER_PAGE = 10;
 const Home: React.FC = () => {
@@ -62,8 +63,15 @@ const sortedTodos = useMemo(() => {
     }
 }, [inView, hasNextPage, fetchNextPage]);
 
-  const handleCreateTodo = () => {
-    const createPromise = isEdited && editId
+useEffect(() => {
+  if (todos) {
+      const allTodos = todos.pages.flatMap(page => page.todos);
+      setTodos(allTodos);
+  }
+}, [todos, setTodos]);
+
+const handleCreateTodo = () => {
+  const createPromise = isEdited && editId
     ? updateTodoMutation.mutateAsync({ id: editId, updatedTodo: { title: newTodo.title, description: newTodo.description } })
     : createTodoMutation.mutateAsync(newTodo);
 
@@ -81,8 +89,8 @@ const sortedTodos = useMemo(() => {
   setEditId(null);
   setIsFocused(false);
   setHasInput(false);
+};
 
-  };
 
   const handleUpdateTodo = (id: string | number, updatedTodo: UpdateTodo) => {
     showPromiseToast(
@@ -194,7 +202,7 @@ const sortedTodos = useMemo(() => {
             )}
           </Grid>
           <Box mt={4}>
-          {sortedTodos.length > 0 ? <TodoList todos={sortedTodos} onUpdate={handleUpdateTodo} onDelete={handleDeleteTodo} handleEdit={handleEdit} /> : <Skeleton count={5} width={900} height={64} borderRadius={"12px"} style={{ marginBottom: "0.5rem" }} />}
+          {sortedTodos.length > 0 ? <TodoList handleEdit={handleEdit} handleUpdateTodo={handleUpdateTodo} handleDeleteTodo={handleDeleteTodo} /> : <Skeleton count={5} width={900} height={64} borderRadius={"12px"} style={{ marginBottom: "0.5rem" }} />}
                             {sortedTodos.length === 0 && <p style={{ textAlign: "center" }}>No todos found</p>}
           </Box>
             
